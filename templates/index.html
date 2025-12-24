@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINOMATH</title>
+</head>
+<style>
+    body {
+        background: #000;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #mainContainer {
+        display: flex;
+        gap: 100px;
+        border: 2px rgba(255, 255, 255, 0) solid;
+    }
+
+    #leftSide,
+    #rightSide {
+        width: 500px;
+        height: 260px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .selector {
+        width: 100%;
+        padding: 12px 14px;
+        background-color: #111;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-size: 18px;
+        outline: none;
+        cursor: pointer;
+        height: 55px;
+    }
+
+    .selector option {
+        background-color: #111;
+        color: #fff;
+    }
+
+    .inputs {
+        width: 90%;
+        padding: 10px 12px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 6px;
+        color: #fff;
+        height: 30px;
+        outline: none;
+    }
+
+    .labels {
+        font-size: 16px;
+        color: #aaa;
+        margin-bottom: 5px;
+    }
+
+    .row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .amount-row {
+        display: flex;
+        gap: 8px;
+        outline: none;
+    }
+
+    .amount-input {
+        flex: 1;
+        height: 50px;
+    }
+
+    .currency-select {
+        width: 90px;
+        padding: 10px;
+        background: #111;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 6px;
+        cursor: pointer;
+        height: 50px;
+    }
+
+    #navBar {
+        width: 1200px;
+        height: 75px;
+        border: 2px white solid;
+        margin-bottom: 30px;
+    }
+</style>
+
+<body>
+    <div id="navBar">
+
+    </div>
+
+    <div id="mainContainer">
+        <div id="leftSide">
+            <select id="leftSelector" class="selector">
+                <option value="" disabled>Select Investment / Loan Type</option>
+                <option value="emi">EMI: Equated Monthly Installments</option>
+                <option value="sip">SIP: Systematic Investment Plan</option>
+                <option value="rd">RD: Recurring Deposit</option>
+                <option value="fd">FD: Fixed Deposit</option>
+            </select>
+
+            <label for="amount" class="labels">ENTER AMOUNT</label>
+
+            <div class="amount-row">
+                <input type="number" id="leftAmount" class="inputs amount-input">
+
+                <select id="leftCurrency" class="currency-select">
+                    <option value="INR">₹ INR</option>
+                    <option value="USD">$ USD</option>
+                    <option value="EUR">€ EUR</option>
+                    <option value="GBP">£ GBP</option>
+                </select>
+            </div>
+
+            <div class="row-2">
+                <div>
+                    <label for="rate" class="labels">ENTER RATE ( % )</label>
+                    <input type="number" id="leftRate" class="inputs">
+                </div>
+
+                <div>
+                    <label for="time" class="labels">ENTER TIME (yrs)</label>
+                    <input type="number" id="leftTime" class="inputs">
+                </div>
+            </div>
+        </div>
+
+        <div id="rightSide">
+            <select id="rightSelector" class="selector">
+                <option value="" disabled>Select Investment / Loan Type</option>
+                <option value="emi">EMI: Equated Monthly Installments</option>
+                <option value="sip">SIP: Systematic Investment Plan</option>
+                <option value="rd">RD: Recurring Deposit</option>
+                <option value="fd">FD: Fixed Deposit</option>
+            </select>
+
+            <label for="amount" class="labels">ENTER AMOUNT</label>
+
+            <div class="amount-row">
+                <input type="number" id="rightAmount" class="inputs amount-input">
+
+                <select id="rightCurrency" class="currency-select">
+                    <option value="INR">₹ INR</option>
+                    <option value="USD">$ USD</option>
+                    <option value="EUR">€ EUR</option>
+                    <option value="GBP">£ GBP</option>
+                </select>
+            </div>
+
+            <div class="row-2">
+                <div>
+                    <label for="rate" class="labels">ENTER RATE ( % )</label>
+                    <input type="number" id="rightRate" class="inputs">
+                </div>
+
+                <div>
+                    <label for="time" class="labels">ENTER TIME (yrs)</label>
+                    <input type="number" id="rightTime" class="inputs">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
