@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINOMATH</title>
+</head>
+<style>
+    @font-face {
+        font-family: 'JotiOne';
+        src: url("{{ url_for('static', filename='fonts/JotiOne-Regular.ttf') }}") format("truetype");
+    }
+
+    body {
+        background: #000;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #mainContainer {
+        display: flex;
+        gap: 100px;
+        justify-content: center;
+        border: 2px rgba(255, 255, 255, 0) solid;
+    }
+
+    #leftSide,
+    #rightSide {
+        width: 500px;
+        height: 260px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .selector {
+        width: 100%;
+        padding: 12px 14px;
+        background-color: #111;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-size: 18px;
+        outline: none;
+        cursor: pointer;
+        height: 55px;
+    }
+
+    .selector option {
+        background-color: #111;
+        color: #fff;
+    }
+
+    .inputs {
+        width: 90%;
+        padding: 10px 12px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 6px;
+        color: #fff;
+        height: 30px;
+        outline: none;
+    }
+
+    .labels {
+        font-size: 16px;
+        color: #aaa;
+        margin-bottom: 5px;
+    }
+
+    .row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .amount-row {
+        display: flex;
+        gap: 8px;
+    }
+
+    .amount-input {
+        flex: 1;
+        height: 50px;
+    }
+
+    .currency-select {
+        width: 90px;
+        padding: 10px;
+        background: #111;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 6px;
+        cursor: pointer;
+        height: 50px;
+    }
+
+    #navBar {
+        width: 750px;
+        height: 60px;
+        border: 1px solid rgb(65, 65, 65);
+        border-radius: 12px;
+        margin: 30px auto;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #111;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .navBtns {
+        padding: 10px 18px;
+        background-color: #222;
+        color: #fff;
+        border: 0.5px rgba(114, 114, 114, 0.527) solid;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .navBtns:hover {
+        background-color: #ffffff;
+        color: #000;
+    }
+
+    .navBtns.active {
+        background-color: #ffffff;
+        color: #000;
+    }
+
+    #logo {
+        font-family: 'JotiOne';
+        color: white;
+        font-size: 7rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #logo p {
+        font-size: 15px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+</style>
+
+<body>
+    <div id="logo">
+        FINOMATH
+
+        <p id="paragraph">Plan your finances with ease using FINOMATH. Compare loans and investments side by side,
+            calculate returns, and
+            make informed decisions in minutes.
+        </p>
+    </div>
+
+
+
+    <div id="navBar">
+        <button class="navBtns" id="compare">COMPARE</button>
+        <button class="navBtns" id="futureVal">FUTURE VALUE</button>
+        <button class="navBtns" id="presentVal">PRESENT VALUE</button>
+        <button class="navBtns" id="calcRate">CALCULATE RATE</button>
+        <button class="navBtns" id="calcTime">CALCULATE TIME</button>
+    </div>
+
+
+</body>
+
+</html>
