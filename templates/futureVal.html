@@ -17,100 +17,18 @@
         margin: 0;
         min-height: 100vh;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        display: flex;
-        flex-direction: column;
+        padding-top: 300px;
     }
 
-    #mainContainer {
-        display: flex;
-        gap: 100px;
-        justify-content: center;
-        border: 2px rgba(255, 255, 255, 0) solid;
-    }
-
-    #leftSide,
-    #rightSide {
-        width: 500px;
-        height: 260px;
-        background: #111;
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .selector {
-        width: 100%;
-        padding: 12px 14px;
-        background-color: #111;
-        color: #fff;
-        border: 1px solid #333;
-        border-radius: 8px;
-        font-size: 18px;
-        outline: none;
-        cursor: pointer;
-        height: 55px;
-    }
-
-    .selector option {
-        background-color: #111;
-        color: #fff;
-    }
-
-    .inputs {
-        width: 90%;
-        padding: 10px 12px;
-        background: #111;
-        border: 1px solid #333;
-        border-radius: 6px;
-        color: #fff;
-        height: 30px;
-        outline: none;
-    }
-
-    .labels {
-        font-size: 16px;
-        color: #aaa;
-        margin-bottom: 5px;
-    }
-
-    .row-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-    .amount-row {
-        display: flex;
-        gap: 8px;
-    }
-
-    .amount-input {
-        flex: 1;
-        height: 50px;
-    }
-
-    .currency-select {
-        width: 90px;
-        padding: 10px;
-        background: #111;
-        color: #fff;
-        border: 1px solid #333;
-        border-radius: 6px;
-        cursor: pointer;
-        height: 50px;
-    }
 
     #navBar {
         width: 750px;
         height: 60px;
         border: 1px solid rgb(65, 65, 65);
         border-radius: 12px;
-        margin: 30px auto;
+        margin: 10px 0;
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -153,26 +71,69 @@
         font-family: 'Courier New', Courier, monospace;
     }
 
+
+    #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #000;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #typeSelect {
+        height: 55px;
+        width: 300px;
+        padding: 12px 14px;
+        background-color: #111;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-size: 18px;
+        outline: none;
+        cursor: pointer;
+        height: 55px;
+    }
 </style>
 
 <body>
-    <div id="logo">
-        FINOMATH
+    <div id="header">
+        <div id="logo">
+            FINOMATH
 
-        <p id="paragraph">Plan your finances with ease using FINOMATH. Compare loans and investments side by side,
-            calculate returns, and
-            make informed decisions in minutes.
-        </p>
+            <p id="paragraph">Plan your finances with ease using FINOMATH. Compare loans and investments side by side,
+                calculate returns, and
+                make informed decisions in minutes.
+            </p>
+        </div>
+
+
+        <div id="navBar">
+            <button class="navBtns" id="compare">COMPARE</button>
+            <button class="navBtns" id="futureVal">FUTURE VALUE</button>
+            <button class="navBtns" id="presentVal">PRESENT VALUE</button>
+            <button class="navBtns" id="calcRate">CALCULATE RATE</button>
+            <button class="navBtns" id="calcTime">CALCULATE TIME</button>
+        </div>
     </div>
 
+    <select id="typeSelect" required>
+        <option value="" disabled>SELECT TYPE</option>
+        <option value="simpleInterest">SIMPLE INTEREST</option>
+        <option value="compoundInterest">COMPOUND INTEREST</option>
+        <option value="pvRegular">PRESENT VALUE</option>
+        <option value="fvRegular">FUTURE VALUE</option>
+    </select>
 
+    <div id="mainContainer">
+        <div id="details">
+            <label for="siAmnt" class="labels">ENTER SIMPLE INTEREST</label>
+            <input type="number" class="detailsInput" id="siAmnt">
+        </div>
 
-    <div id="navBar">
-        <button class="navBtns" id="compare">COMPARE</button>
-        <button class="navBtns" id="futureVal">FUTURE VALUE</button>
-        <button class="navBtns" id="presentVal">PRESENT VALUE</button>
-        <button class="navBtns" id="calcRate">CALCULATE RATE</button>
-        <button class="navBtns" id="calcTime">CALCULATE TIME</button>
     </div>
 
 
