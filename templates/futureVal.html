@@ -206,7 +206,34 @@
     </select>
 
     <div id="mainContainer">
-        <div id="details">
+        
+    </div>
+
+    </div>
+
+
+
+
+
+    <!--SCRIPTS-->
+    <script>
+        const typeSelect = document.getElementById('typeSelect');
+        const mainContainer = document.getElementById('mainContainer');
+
+
+        typeSelect.addEventListener('change', function() {
+            const selectedType = this.value;
+            mainContainer.innerHTML = ""
+
+
+            if (selectedType === 'simpleInterest') {
+                mainContainer.innerHTML = simpleInterestForm();
+            }
+        });
+
+
+        function simpleInterestForm() {
+            return `<div id="details">
             <label for="siAmnt" class="labels">ENTER INTEREST AMOUNT</label>
             <input type="number" class="detailsInput" id="siAmnt">
 
@@ -240,10 +267,9 @@
             RESULT PLACE HOLDER
         </div>
 
-        <button id="getResult">GET RESULT</button>
-    </div>
-
-    </div>
+        <button id="getResult">GET RESULT</button>`;
+        }
+    </script>
 
 
 </body>
