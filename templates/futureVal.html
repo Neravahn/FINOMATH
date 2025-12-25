@@ -97,6 +97,83 @@
         cursor: pointer;
         height: 55px;
     }
+
+    .detailsInput,
+    #interval {
+        width: 100%;
+        padding: 10px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 6px;
+        color: white;
+        outline: none;
+        box-sizing: border-box;
+        height: 55px;
+    }
+
+    #mainContainer {
+        border: 1px solid rgba(255, 255, 255, 0);
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #details {
+        width: 500px;
+        height: 300px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    #time-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .labels {
+        font-size: 16px;
+        color: #aaa;
+        margin-bottom: 5px;
+    }
+
+    #getResult {
+        margin-top: 30px;
+        height: 50px;
+        width: 200px;
+        border: 1px solid rgb(117, 117, 117);
+        background-color: white;
+        color: black;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+
+    #result {
+        width: 542px;
+        height: 100px;
+        border: 1px solid #333;
+        border-radius: 12px;
+        background-color: #111;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        margin-top: 30px;
+    }
 </style>
 
 <body>
@@ -130,9 +207,41 @@
 
     <div id="mainContainer">
         <div id="details">
-            <label for="siAmnt" class="labels">ENTER SIMPLE INTEREST</label>
+            <label for="siAmnt" class="labels">ENTER INTEREST AMOUNT</label>
             <input type="number" class="detailsInput" id="siAmnt">
+
+
+            <label for="principalAmnt" class="labels">ENTER PRINCIPAL AMOUNT</label>
+            <input type="number" class="detailsInput" id="principalAmnt">
+
+
+            <div id="time-row">
+
+                <div class="field">
+                    <label for="timeInput" class="labels">ENTER TIME (in yrs)</label>
+                    <input type="number" class="detailsInput" id="timeInput">
+                </div>
+
+                <div class="field">
+                    <label for="interval" class="labels">SELECT INTERVAL</label>
+                    <select id="interval" required>
+                        <option value="">Select</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="half-yearly">Half-Yearly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
+
         </div>
+
+        <div id="result">
+            RESULT PLACE HOLDER
+        </div>
+
+        <button id="getResult">GET RESULT</button>
+    </div>
 
     </div>
 
