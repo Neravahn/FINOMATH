@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINOMATH</title>
+</head>
+<style>
+    @font-face {
+        font-family: 'JotiOne';
+        src: url("{{ url_for('static', filename='fonts/JotiOne-Regular.ttf') }}") format("truetype");
+    }
+
+    body {
+        background: #000;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 300px;
+    }
+
+
+    #navBar {
+        width: 750px;
+        height: 60px;
+        border: 1px solid rgb(65, 65, 65);
+        border-radius: 12px;
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #111;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .navBtns {
+        padding: 10px 18px;
+        background-color: #222;
+        color: #fff;
+        border: 0.5px rgba(114, 114, 114, 0.527) solid;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+
+    .navBtns:hover {
+        background-color: #ffffff;
+        color: #000;
+    }
+
+    .navBtns.active {
+        background-color: #ffffff;
+        color: #000;
+    }
+
+    #logo {
+        font-family: 'JotiOne';
+        color: white;
+        font-size: 7rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #logo p {
+        font-size: 15px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+
+    #header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #000;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #typeSelect {
+        height: 55px;
+        width: 300px;
+        padding: 12px 14px;
+        background-color: #111;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 8px;
+        font-size: 18px;
+        outline: none;
+        cursor: pointer;
+        height: 55px;
+    }
+
+    .detailsInput,
+    #interval,
+    #pvType {
+        width: 100%;
+        padding: 10px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 6px;
+        color: white;
+        outline: none;
+        box-sizing: border-box;
+        height: 55px;
+    }
+
+    #mainContainer {
+        border: 1px solid rgba(255, 255, 255, 0);
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    #details {
+        width: 500px;
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    #time-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .labels {
+        font-size: 16px;
+        color: #aaa;
+        margin-bottom: 5px;
+    }
+
+    #getResult {
+        margin-top: 30px;
+        height: 50px;
+        width: 200px;
+        border: 1px solid rgb(117, 117, 117);
+        background-color: white;
+        color: black;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+
+    #result {
+        width: 542px;
+        height: 100px;
+        border: 1px solid #333;
+        border-radius: 12px;
+        background-color: #111;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        margin-top: 30px;
+    }
+</style>
+
+<body>
+    <div id="header">
+        <div id="logo">
+            FINOMATH
+
+            <p id="paragraph">Plan your finances with ease using FINOMATH. Compare loans and investments side by side,
+                calculate returns, and
+                make informed decisions in minutes.
+            </p>
+        </div>
+
+
+        <div id="navBar">
+            <button class="navBtns" id="compare">COMPARE</button>
+            <button class="navBtns" id="futureVal">FUTURE VALUE</button>
+            <button class="navBtns" id="presentVal">PRESENT VALUE</button>
+            <button class="navBtns" id="calcRate">CALCULATE RATE</button>
+            <button class="navBtns" id="calcTime">CALCULATE TIME</button>
+        </div>
+    </div>
+
+    <select id="typeSelect" required>
+        <option value="" disabled>SELECT TYPE</option>
+        <option value="simpleInterest">SIMPLE INTEREST</option>
+        <option value="compoundInterest">COMPOUND INTEREST</option>
+        <option value="presentVal">PRESENT VALUE</option>
+        <option value="futureVal">FUTURE VALUE</option>
+    </select>
+
+    <div id="mainContainer">
+
+    </div>
+
+    </div>
+
+
+
+
+
+    <!--SCRIPTS-->
+    <script>
+        const typeSelect = document.getElementById('typeSelect');
+        const mainContainer = document.getElementById('mainContainer');
+
+
+        typeSelect.addEventListener('change', function () {
+            const selectedType = this.value;
+            mainContainer.innerHTML = ""
+
+
+            if (selectedType === 'simpleInterest') {
+                mainContainer.innerHTML = simpleInterestForm();
+            };
+
+            if (selectedType === 'compoundInterest') {
+                mainContainer.innerHTML = compoundInterestForm();
+            };
+
+            if (selectedType === 'presentVal') {
+                mainContainer.innerHTML = presentValForm();
+            };
+
+            if (selectedType === 'futureVal') {
+                mainContainer.innerHTML = futureValFrom();
+            }
+        });
+
+
+        function simpleInterestForm() {
+            return `<div id="details">
+            <label for="interestAmnt" class="labels">ENTER INTEREST AMOUNT</label>
+            <input type="number" class="detailsInput" id="interestAmnt">
+
+
+            <label for="principalAmnt" class="labels">ENTER PRINCIPAL AMOUNT</label>
+            <input type="number" class="detailsInput" id="principalAmnt">
+
+
+            <div id="time-row">
+
+                <div class="field">
+                    <label for="timeInput" class="labels">ENTER TIME (in yrs)</label>
+                    <input type="number" class="detailsInput" id="timeInput">
+                </div>
+
+                <div class="field">
+                    <label for="interval" class="labels">SELECT INTERVAL</label>
+                    <select id="interval" required>
+                        <option value="">Select</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="half-yearly">Half-Yearly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="result">
+            RESULT PLACE HOLDER
+        </div>
+
+        <button id="getResult">GET RESULT</button>`;
+        }
+
+        function compoundInterestForm() {
+            return `<div id="details">
+            <label for="interestAmnt" class="labels">ENTER INTEREST AMOUNT</label>
+            <input type="number" class="detailsInput" id="interestAmnt">
+
+
+            <label for="principalAmnt" class="labels">ENTER PRINCIPAL AMOUNT</label>
+            <input type="number" class="detailsInput" id="principalAmnt">
+
+
+            <div id="time-row">
+
+                <div class="field">
+                    <label for="timeInput" class="labels">ENTER TIME (in yrs)</label>
+                    <input type="number" class="detailsInput" id="timeInput">
+                </div>
+
+                <div class="field">
+                    <label for="interval" class="labels">SELECT INTERVAL</label>
+                    <select id="interval" required>
+                        <option value="">Select</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="half-yearly">Half-Yearly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="result">
+            RESULT PLACE HOLDER
+        </div>
+
+        <button id="getResult">GET RESULT</button>`;
+        }
+
+        function presentValForm() {
+            return `<div id="details">
+            <label for="pvType" class="labels">SELECT PRESENT VALUE TYPE</label>
+            <select id="pvType" required>
+                <option value="" disabled>SELECT PRESENT VLAUE TYPE</option>
+                <option value="regular">REGULAR</option>
+                <option value="immediate">IMMEDIATE</option>
+            </select>
+
+            <label for="installmentAmnt" class="labels">ENTER INSTALLMENT AMOUNT</label>
+            <input type="number" class="detailsInput" id="installmentAmnt">
+
+
+            <label for="annuityAmnt" class="labels">ENTER PRESENT VALUE AMOUNT</label>
+            <input type="number" class="detailsInput" id="annuityAmnt">
+
+
+            <div id="time-row">
+
+                <div class="field">
+                    <label for="timeInput" class="labels">ENTER TIME (in yrs)</label>
+                    <input type="number" class="detailsInput" id="timeInput">
+                </div>
+
+                <div class="field">
+                    <label for="interval" class="labels">SELECT INTERVAL</label>
+                    <select id="interval" required>
+                        <option value="">Select</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="half-yearly">Half-Yearly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="result">
+            RESULT PLACE HOLDER
+        </div>
+
+        <button id="getResult">GET RESULT</button>`;
+        }
+
+
+        function futureValFrom() {
+            return `<div id="details">
+            <label for="pvType" class="labels">SELECT FUTURE VALUE TYPE</label>
+            <select id="pvType" required>
+                <option value="" disabled>SELECT FUTURE VLAUE TYPE</option>
+                <option value="regular">REGULAR</option>
+                <option value="immediate">IMMEDIATE</option>
+            </select>
+
+            <label for="installmentAmnt" class="labels">ENTER INSTALLMENT AMOUNT</label>
+            <input type="number" class="detailsInput" id="installmentAmnt">
+
+
+            <label for="annuityAmnt" class="labels">ENTER FUTURE VALUE AMOUNT</label>
+            <input type="number" class="detailsInput" id="annuityAmnt">
+
+
+            <div id="time-row">
+
+                <div class="field">
+                    <label for="timeInput" class="labels">ENTER TIME (in yrs)</label>
+                    <input type="number" class="detailsInput" id="timeInput">
+                </div>
+
+                <div class="field">
+                    <label for="interval" class="labels">SELECT INTERVAL</label>
+                    <select id="interval" required>
+                        <option value="">Select</option>
+                        <option value="yearly">Yearly</option>
+                        <option value="half-yearly">Half-Yearly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="result">
+            RESULT PLACE HOLDER
+        </div>
+
+        <button id="getResult">GET RESULT</button>`
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
+
+
+</body>
+
+</html>

@@ -8,7 +8,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('compare.html')
+
+
+@app.route('/rate')
+def calculateRate():
+    return render_template('calcRate.html')
+
+
+@app.route("/time")
+def calculateTime():
+    return render_template('calcTime.html')
 
 
 if __name__ == "__main__":
