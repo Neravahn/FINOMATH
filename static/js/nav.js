@@ -8,5 +8,10 @@ document.getElementById("compare").addEventListener('click', function () {
 
 
 document.getElementById("calcTime").addEventListener("click", function() {
-    window.location.href = "time";
+    window.location.href = "/time";
+})
+
+
+document.getElementById("annuity").addEventListener("click", function() {
+    window.location.href = "/annuity";
 })
