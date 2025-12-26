@@ -26,5 +26,11 @@ def calculateTime():
 def annuity():
     return render_template("annuity.html")
 
+
+
+@app.route("/installment")
+def installment():
+    return render_template("installment.html")
+
 if __name__ == "__main__":
     app.run(debug=True)

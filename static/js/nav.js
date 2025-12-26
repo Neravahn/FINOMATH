@@ -15,3 +15,8 @@ document.getElementById("calcTime").addEventListener("click", function() {
 document.getElementById("annuity").addEventListener("click", function() {
     window.location.href = "/annuity";
 })
+
+
+document.getElementById("installment").addEventListener("click", function () {
+    window.location.href = "/installment";
+})

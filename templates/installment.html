@@ -202,17 +202,15 @@
         <div id="details">
 
             <label for="annuityType" class="labels">SELECT ANNUITY TYPE</label>
-            <select id="annuityType">
-                <option value="" disabled>SELECT ANNUITY TYPE</option>
+            <select id="annuityType" required>
                 <option value="pvRegular">PRESENT VALUE (regular)</option>
                 <option value="pvImmediate">PRESENT VALUE (immediate)</option>
                 <option value="fvRegular">FUTURE VALUE (regular)</option>
                 <option value="fvImmediate">FUTURE VALUE (immediate)</option>
             </select>
 
-            <label for="installment" class="labels">ENTER INSTALLMENT AMOUNT</label>
-            <input id="installment" type="number" class="detailsInput" required>
-
+            <label for="annuity" class="labels">ENTER ANNUITY AMOUNT</label>
+            <input id="annuityInput" type="number" class="detailsInput" required>
 
             <label for="rateInput" class="labels">ENTER RATE (per annum)</label>
             <input id="rateInput" type="number" class="detailsInput" required>
@@ -221,26 +219,24 @@
 
                 <div class="field">
                     <label for="timeInput" class="labels">ENTER TIME (in yrs)</label>
-                    <input type="number" class="detailsInput" id="timeInput">
+                    <input type="number" class="detailsInput" id="timeInput" required>
                 </div>
 
                 <div class="field">
                     <label for="interval" class="labels">SELECT INTERVAL</label>
                     <select id="interval" required>
-                        <option value="">Select</option>
-                        <option value="yearly">Yearly</option>
-                        <option value="half-yearly">Half-Yearly</option>
-                        <option value="quarterly">Quarterly</option>
-                        <option value="monthly">Monthly</option>
+                        <option value="1">Yearly</option>
+                        <option value="2">Half-Yearly</option>
+                        <option value="4">Quarterly</option>
+                        <option value="12">Monthly</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div id="result">
-            RESULT PLACE HOLDER
         </div>
-        <button id="getResult">GET RESULT</button>`;
+        <button id="getResult">GET RESULT</button>
 
     </div>
 
@@ -249,6 +245,55 @@
 
     <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
     <script>
+
+        document.getElementById("getResult").addEventListener("click", function () {
+            const annuityType = document.getElementById("annuityType").value;
+            const annuity = parseFloat(document.getElementById("annuityInput").value.trim());
+            const rate = parseFloat(document.getElementById("rateInput").value.trim());
+            const time = parseFloat(document.getElementById("timeInput").value.trim());
+            const interval = Number(document.getElementById("interval").value.trim());
+            const result = document.getElementById('result');
+
+
+            console.log(annuityType, rate, time, interval);
+
+            const n = time * interval;
+            const i = rate / (100 * interval);
+
+            if (!isFinite(annuity) || !isFinite(rate) || !isFinite(time) || !isFinite(interval)) {
+                result.innerHTML = "PLEASE ENTER VALID INPUTS";
+                return;
+            }
+
+            else if (annuityType === "pvRegular") {
+                const installment = annuity / ((1 - (1 + i) ** -n) / i)
+                result.innerHTML = installment.toFixed(2);
+            }
+
+            else if (annuityType === "pvImmediate") {
+                const installment = annuity / (((1 - (1 + i) ** -n) / i) * (i + 1))
+                result.innerHTML = installment.toFixed(2);
+            }
+
+            else if (annuityType === "fvRegular") {
+                const installment = annuity / ((((1 + i) ** n) - 1) / i)
+                result.innerHTML = installment.toFixed(2);
+            }
+
+
+            else if (annuityType === "fvImmediate") {
+                const installment = annuity / (((((1 + i) ** n) - 1) / i) * (i + 1))
+                result.innerHTML = installment.toFixed(2);
+            }
+
+            else {
+                result.innerHTML = "INVALID INPUT"
+            }
+
+        })
+
+
+
     </script>
 
 
