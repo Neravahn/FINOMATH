@@ -210,8 +210,8 @@
                 <option value="fvImmediate">FUTURE VALUE (immediate)</option>
             </select>
 
-            <label for="installment" class="labels">ENTER INSTALLMENT AMOUNT</label>
-            <input id="installment" type="number" class="detailsInput" required>
+            <label for="installmentInput" class="labels">ENTER INSTALLMENT AMOUNT</label>
+            <input id="installmentInput" type="number" class="detailsInput" required>
 
 
             <label for="rateInput" class="labels">ENTER RATE (per annum)</label>
@@ -227,11 +227,10 @@
                 <div class="field">
                     <label for="interval" class="labels">SELECT INTERVAL</label>
                     <select id="interval" required>
-                        <option value="">Select</option>
-                        <option value="yearly">Yearly</option>
-                        <option value="half-yearly">Half-Yearly</option>
-                        <option value="quarterly">Quarterly</option>
-                        <option value="monthly">Monthly</option>
+                        <option value="1">Yearly</option>
+                        <option value="2">Half-Yearly</option>
+                        <option value="4">Quarterly</option>
+                        <option value="12">Monthly</option>
                     </select>
                 </div>
             </div>
@@ -249,6 +248,45 @@
 
     <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
     <script>
+        document.getElementById("getResult").addEventListener("click", function () {
+            const rate = parseFloat(document.getElementById("annuityType").value.trim());
+            const installment = parseFloat(document.getElementById("installmentInput").value.trim());
+            const time = parseFloat(document.getElementById("timeInput").value.trim());
+            const interval = Number(document.getElementById("rateInput").value.trim());
+            const annuityType = document.getElementById("annuityType").value;
+
+
+            const i = rate / (100 * interval);
+            const n = time * interval
+
+            const result = document.getElementById("result");
+
+
+            if (!isFinite(installment) || !isFinite(rate) || !isFinite(time) || !isFinite(interval)) {
+                result.innerHTML = "PLEASE ENTER VALID INPUTS";
+                return;
+            }
+
+            else if (annuityType === "pvRegular") {
+                const annuityAns = (1 - ((1 + i) ** -n)) / i
+                result.innerHTML = annuityAns;
+            }
+
+            else if (annuityType === "pvImmediate") {
+                const annuityAns = ((1 - ((1 + i) ** -n)) / i) * (i + 1)
+                result.innerHTML = annuityAns;
+            }
+
+            else if (annuityType === "fvRegular") {
+                const annuityAns = (((1 + i) ** n) - 1) / i
+                result.innerHTML = annuityAns;
+            }
+
+            else if (annuityType === "fvImmediate") {
+                const annuityAns = ((((1 + i) ** n) - 1) / i) * (1 + 1)
+                result.innerHTML = annuityAns;
+            }
+        })
     </script>
 
 
