@@ -100,7 +100,8 @@
 
     .detailsInput,
     #interval,
-    #pvType {
+    #pvType,
+    #fvType {
         width: 100%;
         padding: 10px;
         background: #111;
@@ -368,8 +369,8 @@
 
         function futureValFrom() {
             return `<div id="details">
-            <label for="pvType" class="labels">SELECT FUTURE VALUE TYPE</label>
-            <select id="pvType" required>
+            <label for="fvType" class="labels">SELECT FUTURE VALUE TYPE</label>
+            <select id="fvType" required>
                 <option value="" disabled>SELECT FUTURE VLAUE TYPE</option>
                 <option value="regular">REGULAR</option>
                 <option value="immediate">IMMEDIATE</option>
@@ -414,10 +415,12 @@
     <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
     <script>
         document.addEventListener("click", function (e) {
-            if (e.target.id = 'getResult') {
+            if (e.target.id === 'getResult') {
                 handleCalculations();
             }
         });
+
+
 
 
         function handleCalculations() {
@@ -436,6 +439,11 @@
             const intervalSelect = document.getElementById("interval").value;
             const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
 
+            if (interest === 0 || principal === 0 || rate ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
+            
+
             const result = document.getElementById("result");
 
 
@@ -450,7 +458,7 @@
 
             const time = (interest * 100) / (principal * rate)
 
-            return result.innerHTML = `TIME : ${time} years`;
+            return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
         }
 
 
@@ -459,6 +467,11 @@
             const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
             const intervalSelect = document.getElementById("interval").value;
             const rate = parseFloat(document.getElementById("rateInput").value.trim());
+
+            if (interest === 0 || principal === 0 || rate ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
+            
 
             const result = document.getElementById('result');
 
@@ -475,7 +488,7 @@
                 Math.log(amount / principal) /
                 (interval * Math.log(1 + rate / interval));
 
-            result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+            return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
 
 
         }
@@ -487,6 +500,11 @@
             const annuityAmnt = parseFloat(document.getElementById("annuityAmnt").value.trim());
             const rate = parseFloat(document.getElementById("rateInpur").value.trim());
             const intervalSelect = document.getElementById("interval").value;
+
+            if (installment === 0 || annuityAmnt === 0 || rate ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
+            
 
             let interval = 0;
             if (intervalSelect === "yearly") { interval = 1 }
@@ -506,7 +524,7 @@
 
                 const time = n / interval;
 
-                result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+                return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
             }
 
             else if (pvType === "immediate") {
@@ -518,9 +536,54 @@
 
                 const time = n / interval;
 
-                result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+                return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
             }
         }
+
+
+        function calculateFutureValue() {
+            const fvType = document.getElementById("fvType").value;
+            const installment = parseFloat(document.getElementById("installmentAmnt").value.trim());
+            const annuityAmnt = parseFloat(document.getElementById("annuityAmnt").value.trim());
+            const rate = parseFloat(document.getElementById("rateInput").value.trim());
+            const intervalSelect = document.getElementById("interval").value;
+
+            if (installment === 0 || annuityAmnt === 0 || rate ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
+            
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+
+            const result = document.getElementById("result");
+
+            if (fvType === 'regular') {
+                const n =
+                    Math.log(1 + (annuityAmnt * r) / installment) /
+                    Math.log(1 + r);
+
+                const time = n / interval;
+
+                return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+            }
+
+            else if (fvType === 'immediate') {
+                const n =
+                    Math.log(
+                        1 + (annuityAmnt * r) / (installment * (1 + r))
+                    ) / Math.log(1 + r);
+
+                const time = n / interval;
+
+                return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+            }
+        }
+        
     </script>
 
 
