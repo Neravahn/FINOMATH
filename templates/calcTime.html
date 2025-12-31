@@ -412,6 +412,116 @@
         }
     </script>
     <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
+    <script>
+        document.addEventListener("click", function (e) {
+            if (e.target.id = 'getResult') {
+                handleCalculations();
+            }
+        });
+
+
+        function handleCalculations() {
+            const type = document.getElementById("typeSelect").value;
+
+            if (type === "simpleInterest") { calculateSimpleInterest() }
+            else if (type === "compoundInterest") { calculateCompoundInterest() }
+            else if (type === "presentVal") { calculatePresentValue() }
+            else if (type === "futureVal") { calculateFutureValue() }
+        }
+
+
+        function calculateSimpleInterest() {
+            const interest = parseFloat(document.getElementById("interestAmnt").value.trim());
+            const rate = parseFloat(document.getElementById("rateInput").value.trim());
+            const intervalSelect = document.getElementById("interval").value;
+            const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
+
+            const result = document.getElementById("result");
+
+
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+
+
+            const time = (interest * 100) / (principal * rate)
+
+            return result.innerHTML = `TIME : ${time} years`;
+        }
+
+
+        function calculateCompoundInterest() {
+            const interest = parseFloat(document.getElementById("interestAmnt").value.trim());
+            const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
+            const intervalSelect = document.getElementById("interval").value;
+            const rate = parseFloat(document.getElementById("rateInput").value.trim());
+
+            const result = document.getElementById('result');
+
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+            const amount = principal + interest;
+
+            const time =
+                Math.log(amount / principal) /
+                (interval * Math.log(1 + rate / interval));
+
+            result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+
+
+        }
+
+
+        function calculatePresentValue() {
+            const pvType = document.getElementById("pvType").value;
+            const installment = parseFloat(document.getElementById("installmentAmnt").value.trim());
+            const annuityAmnt = parseFloat(document.getElementById("annuityAmnt").value.trim());
+            const rate = parseFloat(document.getElementById("rateInpur").value.trim());
+            const intervalSelect = document.getElementById("interval").value;
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+
+            const result = document.getElementById("result");
+
+            const r = rate / (100 * interval);
+
+            if (pvType === "regular") {
+                const n =
+                    -Math.log(1 - (annuityAmnt * r) / installment)
+                    / Math.log(1 + r);
+
+                const time = n / interval;
+
+                result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+            }
+
+            else if (pvType === "immediate") {
+
+                const n =
+                    -Math.log(
+                        1 - (annuityAmnt * r) / (installment * (1 + r))
+                    ) / Math.log(1 + r);
+
+                const time = n / interval;
+
+                result.innerHTML = `TIME : ${time.toFixed(2)} years`;
+            }
+        }
+    </script>
 
 
 </body>
