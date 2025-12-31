@@ -439,6 +439,10 @@
             const intervalSelect = document.getElementById("interval").value;
 
             const result = document.getElementById("result");
+            if (installment === 0 || annuityAmt === 0 || time ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
+            
 
 
             let interval = 0;
@@ -514,6 +518,10 @@
 
             const result = document.getElementById("result");
 
+            if (interest === 0 || principal === 0 || time ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
+
 
             let interval = 0;
             if (intervalSelect === "yearly") { interval = 1 }
@@ -538,6 +546,10 @@
             const annuityAmt = parseFloat(document.getElementById("annuityAmnt").value);
             const time = parseFloat(document.getElementById("timeInput").value);
             const intervalSelect = document.getElementById("interval").value;
+
+            if (installment === 0 || annuityAmt === 0 || time ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
 
             const result = document.getElementById('result');
 
@@ -619,6 +631,10 @@
             const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
 
             const result = document.getElementById("result");
+
+            if (interest === 0 || principal === 0 || time ===0) {
+                result.innerHTML = "PLEASE ENTER VALID VALUES";
+            }
 
 
             let interval = 0;
