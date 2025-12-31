@@ -34,7 +34,7 @@
     #leftSide,
     #rightSide {
         width: 500px;
-        height: 260px;
+        height: 400px;
         background: #111;
         border: 1px solid #333;
         border-radius: 12px;
@@ -163,15 +163,18 @@
 
     .result {
         width: 542px;
-        height: 100px;
+        height: 300px;
         border: 1px solid #333;
         border-radius: 12px;
         background-color: #111;
         color: #fff;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding: 20px;
         font-size: 16px;
+        line-height: 1.8;
     }
 
     #conclusion {
@@ -245,7 +248,7 @@
                 <option value="fd">FD: Fixed Deposit</option>
             </select>
 
-            <label for="amount" class="labels">ENTER AMOUNT</label>
+            <label for="amount" class="labels">ENTER INSTALLMENT AMOUNT</label>
 
             <div class="amount-row">
                 <input type="number" id="leftAmount" class="inputs amount-input">
@@ -263,11 +266,20 @@
                     <label for="rate" class="labels">ENTER RATE ( % )</label>
                     <input type="number" id="leftRate" class="inputs">
                 </div>
-
                 <div>
-                    <label for="time" class="labels">ENTER TIME (yrs)</label>
-                    <input type="number" id="leftTime" class="inputs">
+                    <label for="leftInterval" class="labels">SELECT INTERVAL</label>
+                    <select id="leftInterval" class="selector" required>
+                        <option value="1">Yearly</option>
+                        <option value="2">Half-Yearly</option>
+                        <option value="4">Quarterly</option>
+                        <option value="12">Monthly</option>
+                    </select>
                 </div>
+
+            </div>
+            <div>
+                <label for="time" class="labels">ENTER TIME (yrs)</label>
+                <input type="number" id="leftTime" class="inputs">
             </div>
         </div>
 
@@ -280,7 +292,7 @@
                 <option value="fd">FD: Fixed Deposit</option>
             </select>
 
-            <label for="amount" class="labels">ENTER AMOUNT</label>
+            <label for="amount" class="labels">ENTER INSTALLMENT AMOUNT</label>
 
             <div class="amount-row">
                 <input type="number" id="rightAmount" class="inputs amount-input">
@@ -298,11 +310,20 @@
                     <label for="rate" class="labels">ENTER RATE ( % )</label>
                     <input type="number" id="rightRate" class="inputs">
                 </div>
-
                 <div>
-                    <label for="time" class="labels">ENTER TIME (yrs)</label>
-                    <input type="number" id="rightTime" class="inputs">
+                    <label for="rightInterval" class="labels">SELECT INTERVAL</label>
+                    <select id="rightInterval" class="selector" required>
+                        <option value="1">Yearly</option>
+                        <option value="2">Half-Yearly</option>
+                        <option value="4">Quarterly</option>
+                        <option value="12">Monthly</option>
+                    </select>
                 </div>
+            </div>
+
+            <div>
+                <label for="time" class="labels">ENTER TIME (yrs)</label>
+                <input type="number" id="rightTime" class="inputs">
             </div>
         </div>
     </div>
@@ -320,15 +341,105 @@
         </div>
     </div>
 
-    <div id="conclusion">
-        Conclusion Placeholder
-    </div>
+
 
 
 
 
 
     <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
+    <script>
+        document.getElementById("getResult").addEventListener("click", function () {
+
+            //LEFT DETAILS
+            const leftInvestmentType = document.getElementById("leftSelector").value;
+            const leftAmount = parseFloat(document.getElementById("leftAmount").value.trim());
+            const leftRate = parseFloat(document.getElementById("leftRate").value.trim());
+            const leftTime = parseFloat(document.getElementById("leftTime").value.trim());
+            const leftInterval = Number(document.getElementById("leftInterval").value);
+
+            const leftResult = document.getElementById("leftResult");
+
+            if (isNaN(leftAmount) || isNaN(leftRate) || isNaN(leftTime)) {
+                leftResult.innerHTML = "Please enter valid numbers";
+                return;
+            }
+
+            const r = leftRate / (100 * leftInterval);
+            const n = leftTime * leftInterval;
+
+            let invested = 0;
+            let finalValue = 0;
+
+            if (leftInvestmentType === "emi") {
+                const emi =
+                    (leftAmount * r * (1 + r) ** n) /
+                    ((1 + r) ** n - 1);
+
+                const totalPaid = emi * n;
+                const interest = totalPaid - leftAmount;
+
+                leftResult.innerHTML = `
+            <div><b>EMI:</b> ₹${emi.toFixed(2)}</div>
+            <div><b>Total Paid:</b> ₹${totalPaid.toFixed(2)}</div>
+            <div><b>Interest:</b> ₹${interest.toFixed(2)}</div>
+        `;
+            }
+
+
+            if (leftInvestmentType === "sip") {
+                invested = leftAmount * n;
+                finalValue =
+                    leftAmount *
+                    (((1 + r) ** n - 1) / r) *
+                    (1 + r);
+
+                leftResult.innerHTML = `
+            <div><b>Total Invested:</b> ₹${invested.toFixed(2)}</div>
+            <div><b>Final Value:</b> ₹${finalValue.toFixed(2)}</div>
+            >div><b>Wealth Gained:</b> ₹${(finalValue - invested).toFixed(2)}</div>
+        `;
+            }
+
+            if (leftInvestmentType === "rd") {
+                invested = leftAmount * n;
+                finalValue =
+                    leftAmount *
+                    (((1 + r) ** n - 1) / r);
+
+                leftResult.innerHTML = `
+            <div><b>Total Invested:</b> ₹${invested.toFixed(2)}</div>
+            <div>Final Value:</b> ₹${finalValue.toFixed(2)}</div>
+            <div>Wealth Gained:</b> ₹${(finalValue - invested).toFixed(2)}</div>
+        `;
+            }
+
+
+            if (leftInvestmentType === "fd") {
+                invested = leftAmount;
+                finalValue = leftAmount * (1 + r) ** n;
+
+                leftResult.innerHTML = `
+            <div><b>Invested:</b> ₹${invested.toFixed(2)}</div>
+            <div><b>Maturity Value:</b> ₹${finalValue.toFixed(2)}</div>
+            <div><b>Interest Earned:</b> ₹${(finalValue - invested).toFixed(2)}</div>
+        `;
+            }
+
+
+
+
+
+            //RIGHT DETAILS
+            const rightInvestmentType = document.getElementById("rightSelector").value;
+            const rightAmount = parseFloat(document.getElementById("rightAmount").value.trime());
+            const rightCurrency = document.getElementById("rightCurrency").value;
+            const rightRate = parseFloat(document.getElementById("rightRate").value.trim());
+            const rightTime = parseFloat(document.getElementById("rightTime").value.trim());
+
+
+        })
+    </script>
 
 </body>
 
