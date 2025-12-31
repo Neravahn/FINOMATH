@@ -365,18 +365,15 @@
                 return;
             }
 
-            const r = leftRate / (100 * leftInterval);
-            const n = leftTime * leftInterval;
-
-            let invested = 0;
-            let finalValue = 0;
+            const leftr = leftRate / (100 * leftInterval);
+            const leftn = leftTime * leftInterval;
 
             if (leftInvestmentType === "emi") {
                 const emi =
-                    (leftAmount * r * (1 + r) ** n) /
-                    ((1 + r) ** n - 1);
+                    (leftAmount * leftr * (1 + leftr) ** leftn) /
+                    ((1 + leftr) ** leftn - 1);
 
-                const totalPaid = emi * n;
+                const totalPaid = emi * leftn;
                 const interest = totalPaid - leftAmount;
 
                 leftResult.innerHTML = `
@@ -388,41 +385,39 @@
 
 
             if (leftInvestmentType === "sip") {
-                invested = leftAmount * n;
-                finalValue =
-                    leftAmount *
-                    (((1 + r) ** n - 1) / r) *
-                    (1 + r);
+                const totalInvested = leftAmount * leftn;
+                const finalValue = leftAmount * ((((1 + leftr) ** leftn) - 1) / leftr) * (1 + leftr);
+
 
                 leftResult.innerHTML = `
-            <div><b>Total Invested:</b> ₹${invested.toFixed(2)}</div>
+            <div><b>Total Invested:</b> ₹${totalInvested.toFixed(2)}</div>
             <div><b>Final Value:</b> ₹${finalValue.toFixed(2)}</div>
-            >div><b>Wealth Gained:</b> ₹${(finalValue - invested).toFixed(2)}</div>
+            <div><b>Wealth Gained:</b> ₹${(finalValue - totalInvested).toFixed(2)}</div>
         `;
             }
 
             if (leftInvestmentType === "rd") {
-                invested = leftAmount * n;
-                finalValue =
-                    leftAmount *
-                    (((1 + r) ** n - 1) / r);
+                const maturityValue = (leftAmount * leftn) + (leftAmount * (leftn * (leftn + 1)) / 2 * leftr);
+
+                const totalInvested = leftAmount * leftn;
 
                 leftResult.innerHTML = `
-            <div><b>Total Invested:</b> ₹${invested.toFixed(2)}</div>
-            <div>Final Value:</b> ₹${finalValue.toFixed(2)}</div>
-            <div>Wealth Gained:</b> ₹${(finalValue - invested).toFixed(2)}</div>
+            <div><b>Total Invested:</b> ₹${totalInvested.toFixed(2)}</div>
+            <div><b>Final Value:</b> ₹${maturityValue.toFixed(2)}</div>
+            <div><b>Wealth Gained:</b> ₹${(maturityValue - totalInvested).toFixed(2)}</div>
         `;
             }
 
 
             if (leftInvestmentType === "fd") {
-                invested = leftAmount;
-                finalValue = leftAmount * (1 + r) ** n;
+                const totalInvested = leftAmount;
+
+                const maturityValue = leftAmount * (1 + leftr) ** leftn
 
                 leftResult.innerHTML = `
-            <div><b>Invested:</b> ₹${invested.toFixed(2)}</div>
-            <div><b>Maturity Value:</b> ₹${finalValue.toFixed(2)}</div>
-            <div><b>Interest Earned:</b> ₹${(finalValue - invested).toFixed(2)}</div>
+            <div><b>Invested:</b> ₹${totalInvested.toFixed(2)}</div>
+            <div><b>Maturity Value:</b> ₹${maturityValue.toFixed(2)}</div>
+            <div><b>Interest Earned:</b> ₹${(maturityValue - totalInvested).toFixed(2)}</div>
         `;
             }
 
@@ -436,6 +431,9 @@
             const rightCurrency = document.getElementById("rightCurrency").value;
             const rightRate = parseFloat(document.getElementById("rightRate").value.trim());
             const rightTime = parseFloat(document.getElementById("rightTime").value.trim());
+
+
+            const Result = document.getElementById("leftResult");
 
 
         })
