@@ -369,7 +369,7 @@
         function futureValFrom() {
             return `<div id="details">
             <label for="pvType" class="labels">SELECT FUTURE VALUE TYPE</label>
-            <select id="pvType" required>
+            <select id="fvType" required>
                 <option value="" disabled>SELECT FUTURE VLAUE TYPE</option>
                 <option value="regular">REGULAR</option>
                 <option value="immediate">IMMEDIATE</option>
@@ -424,16 +424,19 @@
 
             if (type === 'simpleInterest') { calculateSimpleInterest() }
             else if (type === 'compoundInterest') { calculateCompoundInterest() }
-            else if (type === 'presentValue') { calculatePresentValue() }
-            else if (type === 'futureValue') { calculateFutureValue() }
+            else if (type === 'presentVal') { calculatePresentValue() }
+            else if (type === 'futureVal') { calculateFutureValue() }
         };
 
 
-        function calculateSimpleInterest() {
-            const interest = parseFloat(document.getElementById("interestAmt").value.trim());
+        function calculatePresentValue() {
+
+            const pvType = document.getElementById("pvType").value;
+            const installment = parseFloat(document.getElementById("installmentAmnt").value.trim());
+            const annuityAmt = parseFloat(document.getElementById("annuityAmnt").value.trim());
             const time = parseFloat(document.getElementById("timeInput").value.trim());
+
             const intervalSelect = document.getElementById("interval").value;
-            const principal = parseFloat(document.getElementById("principal").value.trim());
 
             const result = document.getElementById("result");
 
@@ -441,7 +444,187 @@
             let interval = 0;
             if (intervalSelect === "yearly") { interval = 1 }
             else if (intervalSelect === "half-yearly") { interval = 2 }
-            else if (intervalSelect === "quaterly") { interval = 4 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+
+            const n = time * interval;
+
+
+            if (pvType === 'regular') {
+
+                let r = 0.05;
+                let epsilon = 1e-6;
+                let maxIter = 100;
+                let iter = 0;
+                let diff;
+
+                do {
+                    const f = installment * (1 - Math.pow(1 + r, -n)) / r - annuityAmt;
+                    const fPrime = (installment * (Math.pow(1 + r, -n) * n / (1 + r)) - (installment * (1 - Math.pow(1 + r, -n)) / (r * r)));
+                    diff = f / fPrime;
+                    r = r - diff;
+                    iter++;
+                } while (Math.abs(diff) > epsilon && iter < maxIter);
+
+                const annualRate = r * interval * 100;
+                return result.innerHTML = `RATE : ${annualRate.toFixed(2)} % p.a`;
+
+            }
+
+            else if (pvType === 'immediate') {
+                let r = 0.05;
+                const epsilon = 1e-6;
+                const maxIter = 100;
+
+                for (let i = 0; i < maxIter; i++) {
+
+                    const factor = Math.pow(1 + r, -n);
+
+                    const f =
+                        installment * ((1 - factor) / r) * (1 + r) - annuityAmt;
+
+                    const fPrime =
+                        installment * (
+                            ((factor * n) / (1 + r)) * (1 + r) / r
+                            - ((1 - factor) * (1 + r)) / (r * r)
+                            + (1 - factor) / r
+                        );
+
+                    const delta = f / fPrime;
+                    r = r - delta;
+
+                    if (Math.abs(delta) < epsilon) break;
+                }
+
+                const annualRate = r * interval * 100;
+                return result.innerHTML = `RATE : ${annualRate.toFixed(2)} % p.a`;
+
+            }
+
+        };
+
+
+
+        function calculateCompoundInterest() {
+            const interest = parseFloat(document.getElementById("interestAmnt").value.trim());
+            const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
+            const time = parseFloat(document.getElementById("timeInput").value.trim());
+            const intervalSelect = document.getElementById("interval").value;
+
+            const result = document.getElementById("result");
+
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+            const n = time * interval;
+            const amount = principal + interest;
+
+            const ratePerPeriod = Math.pow(amount / principal, 1 / n) - 1;
+            const annualRate = ratePerPeriod * interval * 100;
+
+            return result.innerHTML = `RATE : ${annualRate.toFixed(2)} % p.a`;
+
+        };
+
+
+        function calculateFutureValue() {
+            const fvType = document.getElementById("fvType").value;
+            const installment = parseFloat(document.getElementById("installmentAmnt").value);
+            const annuityAmt = parseFloat(document.getElementById("annuityAmnt").value);
+            const time = parseFloat(document.getElementById("timeInput").value);
+            const intervalSelect = document.getElementById("interval").value;
+
+            const result = document.getElementById('result');
+
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
+            else if (intervalSelect === "monthly") { interval = 12 }
+
+
+            const n = interval * time;
+
+
+            if (fvType === "regular") {
+                let r = 0.05;
+                let diff;
+                const epsilon = 1e-6;
+                let iter = 0;
+                const maxIter = 100;
+
+                do {
+                    const pow = Math.pow(1 + r, n);
+
+                    const f = installment * ((pow - 1) / r) - annuityAmt;
+
+                    const fPrime =
+                        installment * (
+                            (n * pow * r - (pow - 1)) / (r * r)
+                        );
+
+                    diff = f / fPrime;
+                    r = r - diff;
+                    iter++;
+
+                } while (Math.abs(diff) > epsilon && iter < maxIter);
+
+                const annualRate = r * interval * 100;
+                return result.innerHTML = `RATE : ${annualRate.toFixed(2)} % p.a`;
+            }
+
+            else if (fvType === "immediate") {
+                let r = 0.05;
+                const epsilon = 1e-6;
+                const maxIter = 100;
+
+                for (let i = 0; i < maxIter; i++) {
+
+                    const factor = Math.pow(1 + r, n);
+
+                    const f =
+                        installment * ((factor - 1) / r) * (1 + r) - annuityAmt;
+
+                    const fPrime =
+                        installment * (
+                            ((n * factor) / r) * (1 + r)
+                            - ((factor - 1) * (1 + r)) / (r * r)
+                            + (factor - 1) / r
+                        );
+
+                    const delta = f / fPrime;
+                    r = r - delta;
+
+                    if (Math.abs(delta) < epsilon) break;
+                }
+
+                const annualRate = r * interval * 100;
+                return result.innerHTML = `RATE : ${annualRate.toFixed(2)} % p.a`;
+            }
+
+
+        };
+
+
+        function calculateSimpleInterest() {
+            const interest = parseFloat(document.getElementById("interestAmnt").value.trim());
+            const time = parseFloat(document.getElementById("timeInput").value.trim());
+            const intervalSelect = document.getElementById("interval").value;
+            const principal = parseFloat(document.getElementById("principalAmnt").value.trim());
+
+            const result = document.getElementById("result");
+
+
+            let interval = 0;
+            if (intervalSelect === "yearly") { interval = 1 }
+            else if (intervalSelect === "half-yearly") { interval = 2 }
+            else if (intervalSelect === "quarterly") { interval = 4 }
             else if (intervalSelect === "monthly") { interval = 12 }
 
             const n = time * interval;
@@ -449,115 +632,6 @@
             const rate = (interest * interval * 100) / (principal * time * interval);
 
             return result.innerHTML = `RATE : ${rate.toFixed(2)} % p.a`;
-
-
-
-
-            function calculateCompoundInterest() {
-                const interest = parseFloat(document.getElementById("interestAmt").value.trim());
-                const principal = parseFloat(document.getElementById("principalAmt").value.trim());
-                const time = parseFloat(document.getElementById("timeInput").value.trim());
-                const intervalSelect = parseFloat(document.getElementById("interval"), value);
-
-                const result = document.getElementById("result");
-
-
-                let interval = 0;
-                if (intervalSelect === "yearly") { interval = 1 }
-                else if (intervalSelect === "half-yearly") { interval = 2 }
-                else if (intervalSelect === "quaterly") { interval = 4 }
-                else if (intervalSelect === "monthly") { interval = 12 }
-
-                const n = time * interval;
-                const amount = principal + interest;
-
-                const ratePerPeriod = Math.pow(amount / principal, 1 / n) - 1;
-                const annualRate = ratePerPeriod * interval * 100;
-
-                return result.innerHTML = `RATE : ${rate.toFixed(2)} % p.a`;
-
-            }
-
-
-
-            function calculatePresentValue() {
-
-                const pvType = document.getElementById("pvType").value;
-                const installment = parseFloat(document.getElementById("installmentAmt").value.trim());
-                const annuityAmt = parseFloat(document.getElementById("annuityAmt").value.trim());
-                const time = parseFloat(document.getElementById("timeInput").value.trim());
-
-                const intervalSelect = document.getElementById("interval").value;
-
-
-                let interval = 0;
-                if (intervalSelect === "yearly") { interval = 1 }
-                else if (intervalSelect === "half-yearly") { interval = 2 }
-                else if (intervalSelect === "quaterly") { interval = 4 }
-                else if (intervalSelect === "monthly") { interval = 12 }
-
-
-                const n = time * interval;
-
-
-                if (pvType === 'regular') {
-
-                    let r = 0.05;
-                    let epsilon = 1e-6;
-                    let maxIter = 100;
-                    let iter = 0;
-                    let diff;
-
-                    do {
-                        const f = installment * (1 - Math.pow(1 + r, -n)) / r - annuityAmt;
-                        const fPrime = (installment * (Math.pow(1 + r, -n) * n / (1 + r)) - (installment * (1 - Math.pow(1 + r, -n)) / (r * r)));
-                        diff = f / fPrime;
-                        r = r - diff;
-                        iter++;
-                    } while (Math.abs(diff) > epsilon && iter < maxIter);
-
-                    const annualRate = r * interval * 100;
-
-                }
-
-                else if (pvType === 'immediate') {
-                    let r = 0.05;
-                    const epsilon = 1e-6;
-                    const maxIter = 100;
-
-                    for (let i = 0; i < maxIter; i++) {
-
-                        const factor = Math.pow(1 + r, -n);
-
-                        const f =
-                            installment * ((1 - factor) / r) * (1 + r) - annuityAmt;
-
-                        const fPrime =
-                            installment * (
-                                ((factor * n) / (1 + r)) * (1 + r) / r
-                                - ((1 - factor) * (1 + r)) / (r * r)
-                                + (1 - factor) / r
-                            );
-
-                        const delta = f / fPrime;
-                        r = r - delta;
-
-                        if (Math.abs(delta) < epsilon) break;
-                    }
-
-                    const annualRate = r * interval * 100;
-
-                }
-
-
-                return result `RATE : ${annualRate.toFixed(2)} % p.a`;
-
-            }
-
-
-
-
-        
 
         }
     </script>
