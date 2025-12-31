@@ -427,13 +427,74 @@
 
             //RIGHT DETAILS
             const rightInvestmentType = document.getElementById("rightSelector").value;
-            const rightAmount = parseFloat(document.getElementById("rightAmount").value.trime());
-            const rightCurrency = document.getElementById("rightCurrency").value;
+            const rightAmount = parseFloat(document.getElementById("rightAmount").value.trim());
             const rightRate = parseFloat(document.getElementById("rightRate").value.trim());
             const rightTime = parseFloat(document.getElementById("rightTime").value.trim());
+            const rightInterval = Number(document.getElementById("rightInterval").value);
 
 
-            const Result = document.getElementById("leftResult");
+            const rightResult = document.getElementById("rightResult");
+
+            if (isNaN(rightAmount) || isNaN(rightRate) || isNaN(rightTime)) {
+                rightResult.innerHTML = "Please enter valid numbers";
+                return;
+            }
+
+            const rightr = rightRate / (100 * rightInterval);
+            const rightn = rightTime * rightInterval;
+
+            if (rightInvestmentType === "emi") {
+                const emi =
+                    (rightAmount * rightr * (1 + rightr) ** rightn) /
+                    ((1 + rightr) ** rightn - 1);
+
+                const totalPaid = emi * rightn;
+                const interest = totalPaid - rightAmount;
+
+                rightResult.innerHTML = `
+            <div><b>EMI:</b> ₹${emi.toFixed(2)}</div>
+            <div><b>Total Paid:</b> ₹${totalPaid.toFixed(2)}</div>
+            <div><b>Interest:</b> ₹${interest.toFixed(2)}</div>
+        `;
+            }
+
+
+            if (rightInvestmentType === "sip") {
+                const totalInvested = rightAmount * rightn;
+                const finalValue = rightAmount * ((((1 + rightr) ** rightn) - 1) / rightr) * (1 + rightr);
+
+
+                rightResult.innerHTML = `
+            <div><b>Total Invested:</b> ₹${totalInvested.toFixed(2)}</div>
+            <div><b>Final Value:</b> ₹${finalValue.toFixed(2)}</div>
+            <div><b>Wealth Gained:</b> ₹${(finalValue - totalInvested).toFixed(2)}</div>
+        `;
+            }
+
+            if (rightInvestmentType === "rd") {
+                const maturityValue = (rightAmount * rightn) + (rightAmount * (rightn * (rightn + 1)) / 2 * rightr);
+
+                const totalInvested = rightAmount * rightn;
+
+                rightResult.innerHTML = `
+            <div><b>Total Invested:</b> ₹${totalInvested.toFixed(2)}</div>
+            <div><b>Final Value:</b> ₹${maturityValue.toFixed(2)}</div>
+            <div><b>Wealth Gained:</b> ₹${(maturityValue - totalInvested).toFixed(2)}</div>
+        `;
+            }
+
+
+            if (rightInvestmentType === "fd") {
+                const totalInvested = rightAmount;
+
+                const maturityValue = rightAmount * (1 + rightr) ** rightn
+
+                rightResult.innerHTML = `
+            <div><b>Invested:</b> ₹${totalInvested.toFixed(2)}</div>
+            <div><b>Maturity Value:</b> ₹${maturityValue.toFixed(2)}</div>
+            <div><b>Interest Earned:</b> ₹${(maturityValue - totalInvested).toFixed(2)}</div>
+        `;
+            }
 
 
         })
