@@ -1,6 +1,9 @@
 # FINOMATH 
 FINOMATH is a web-based financial calculator designed to help users plan, compare, and analyze financial decisions such as interest calculations, annuities, present value, and future value.
-It is built with HTML, CSS, and Vanilla JavaScript, focusing on clarity, correctness, and extensibility
+It is built with HTML, CSS, and Vanilla JavaScript, focusing on clarity, correctness, and extensibility.
+
+
+[DEMO](https://drive.google.com/file/d/1wvJsIYdiNUt-MviLqupUIaq69fUo03yQ/view?usp=sharing)
 
 
 
