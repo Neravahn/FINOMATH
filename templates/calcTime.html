@@ -468,12 +468,14 @@
             const intervalSelect = document.getElementById("interval").value;
             const rate = parseFloat(document.getElementById("rateInput").value.trim());
 
+            const result = document.getElementById('result');
+
             if (interest === 0 || principal === 0 || rate ===0) {
                 result.innerHTML = "PLEASE ENTER VALID VALUES";
             }
             
 
-            const result = document.getElementById('result');
+            
 
 
             let interval = 0;
@@ -484,9 +486,11 @@
 
             const amount = principal + interest;
 
+            const r = rate / (100 * interval)
+
             const time =
                 Math.log(amount / principal) /
-                (interval * Math.log(1 + rate / interval));
+                (interval * Math.log(1 + r / interval));
 
             return result.innerHTML = `TIME : ${time.toFixed(2)} years`;
 
